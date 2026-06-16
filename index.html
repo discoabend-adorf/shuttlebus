@@ -7,7 +7,6 @@
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="css/leaflet.css">
-        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
         <link rel="stylesheet" href="css/L.Control.Locate.min.css">
         <link rel="stylesheet" href="css/qgis2web.css">
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
@@ -28,7 +27,6 @@
         </div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
-        <script src="js/L.Control.Layers.Tree.min.js"></script>
         <script src="js/L.Control.Locate.min.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
@@ -91,8 +89,8 @@
             if (bounds_group.getLayers().length) {
                 map.fitBounds(bounds_group.getBounds());
             }
-            map.setMaxBounds(map.getBounds());
-            map.setMinZoom(map.getZoom());
+            // map.setMaxBounds(map.getBounds());
+            // map.setMinZoom(map.getZoom());
         }
         map.createPane('pane_TopPlusOpenLight_0');
         map.getPane('pane_TopPlusOpenLight_0').style.zIndex = 400;
@@ -483,6 +481,7 @@
         map.addControl(new L.Control.Search({
             layer: layer_Haltestellengesneu_2,
             initial: false,
+			zoom: 16,
             hideMarkerOnCollapse: true,
             propertyName: 'Name'}));
         if (typeof url === 'undefined') {
