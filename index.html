@@ -106,6 +106,30 @@
             identify: false,
             attribution: '',
         });
+		
+		// Funktion, um Popups bei hoher Zoomstufe zu öffnen
+		function togglePopupsOnZoom() {
+			var zoomLevel = map.getZoom();
+			var threshold = 18; // Ab dieser Stufe öffnen sich die Popups automatisch
+		
+			layer_Haltestellengesneu_2.eachLayer(function(layer) {
+				if (zoomLevel >= threshold) {
+					// Popup öffnen, falls noch nicht offen
+					if (!layer.isPopupOpen()) {
+						layer.openPopup();
+					}
+				} else {
+					// Popup schließen, wenn wir rauszoomen
+					if (layer.isPopupOpen()) {
+						layer.closePopup();
+					}
+				}
+			});
+		}
+
+		// Event-Listener: Karte prüft bei jedem Zoom-Ende, ob Popups geöffnet werden sollen
+		map.on('zoomend', togglePopupsOnZoom);
+		
         map.addLayer(layer_TopPlusOpenLight_0);
         function pop_Linienges_1(feature, layer) {
             layer.on({
@@ -129,7 +153,12 @@
 			layer.on('popupopen', function(e) {
 				addClassToPopupIfMedia(content, e.popup);
 			});
-			layer.bindPopup(content, { maxHeight: 400 });
+			layer.bindPopup(content, { 
+				maxHeight: 400,
+				autoPan: false,
+				closeButton: true,
+				autoClose: false
+			});
         }
 
         function style_Linienges_1_0(feature) {
@@ -442,7 +471,12 @@
 			layer.on('popupopen', function(e) {
 				addClassToPopupIfMedia(content, e.popup);
 			});
-			layer.bindPopup(content, { maxHeight: 400 });
+			layer.bindPopup(content, { 
+				maxHeight: 400,
+				autoPan: false,
+				closeButton: true,
+				autoClose: false
+			});
         }
 
         function style_Haltestellengesneu_2_0() {
@@ -481,9 +515,12 @@
         map.addControl(new L.Control.Search({
             layer: layer_Haltestellengesneu_2,
             initial: false,
-			zoom: 16,
-            hideMarkerOnCollapse: true,
-            propertyName: 'Name'}));
+			propertyName: 'Name',
+			zoom: 18,
+			marker: false,
+			moveToLocation: function(latlng, title, map) {
+				map.setView(latlng, 18)},
+		}));
         if (typeof url === 'undefined') {
             document.getElementsByClassName('search-button')[0].className += ' fa fa-binoculars';
         } else {
